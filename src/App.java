@@ -1,38 +1,36 @@
+import com.victorgabdev.iniflex.exceptions.FuncionariosJaCarregadosException;
 import com.victorgabdev.iniflex.service.FuncionarioService;
+
+import java.util.NoSuchElementException;
 
 public class App {
     public static void main(String[] args) {
 
         FuncionarioService service = new FuncionarioService();
 
-        service.inserirFuncionarios();
-        service.imprimirTodosFuncionarios();
-        System.out.println("----------------------");
+        System.out.println("---TESTE TECNICO---");
 
+        try {
+            System.out.println("-Inserindo Funcionários-");
+            service.inserirFuncionarios();
+            System.out.println("-Funcionários Inseridos");
+            System.out.println("-------------------------");
 
-        //service.aplicarAumentoDeSalario(10);
-        service.imprimirTodosFuncionarios();
+            System.out.println("-Imprimir-");
+            service.imprimirTodosFuncionarios();
+            System.out.println("-------------------------");
 
+            System.out.println("-Arupar-");
+            service.agruparFuncionariosPorFuncao();
+            System.out.println("-Funcionários Agrupados");
+            System.out.println("-------------------------");
 
-        /*
-        System.out.println("----------------------");
-        service.agruparFuncionariosPorFuncao();
-        service.imprimirFuncionariosAgrupados();
-        */
-
-        service.imprimirAniversariantesMes10E12();
-
-        System.out.println("----------------------");
-        service.imprimirFuncionarioMaisVelho();
-
-        System.out.println("----------------------");
-        service.imprimirFuncionariosOrdemAlfabetica();
-
-        System.out.println("----------------------");
-        service.imprimirTotalSalarios();
-
-        System.out.println("----------------------");
-        service.imprimirSalariosEmMinimos();
+            System.out.println("-Imprimir Agrupados");
+            service.imprimirFuncionariosAgrupados();
+            System.out.println("-------------------------");
+        } catch (FuncionariosJaCarregadosException | NoSuchElementException ex) {
+            System.out.println(ex.getMessage());
+        }
 
 
     }

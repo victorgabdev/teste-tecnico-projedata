@@ -1,5 +1,6 @@
 package com.victorgabdev.iniflex.service;
 
+import com.victorgabdev.iniflex.entities.FuncaoFuncionario;
 import com.victorgabdev.iniflex.entities.Funcionario;
 import com.victorgabdev.iniflex.entities.Pessoa;
 import com.victorgabdev.iniflex.exceptions.FuncionariosJaCarregadosException;
@@ -29,7 +30,7 @@ public class FuncionarioService {
     private final List<Funcionario> funcionarios = new ArrayList<>();
 
     /** Mapa que agrupa funcionários por função. A chave é a função e o valor é a lista de funcionários. */
-    private final Map<String, List<Funcionario>> funcionariosAgrupadosPorFuncao = new HashMap<>();
+    private final Map<FuncaoFuncionario, List<Funcionario>> funcionariosAgrupadosPorFuncao = new HashMap<>();
 
     /**
      * Insere todos os funcionários na lista, utilizando dados pré-definidos.
@@ -42,17 +43,16 @@ public class FuncionarioService {
 
         DateTimeFormatter formatter = getFormatter();
 
-        funcionarios.add(new Funcionario("Maria", LocalDate.parse("18/10/2000", formatter), new BigDecimal("2009.44"), "Operador"));
-        funcionarios.add(new Funcionario("João", LocalDate.parse("12/05/1990", formatter), new BigDecimal("2284.38"), "Operador"));
-        funcionarios.add(new Funcionario("Caio", LocalDate.parse("02/05/1961", formatter), new BigDecimal("9836.14"), "Coordenador"));
-        funcionarios.add(new Funcionario("Miguel", LocalDate.parse("14/10/1988", formatter), new BigDecimal("19119.88"), "Diretor"));
-        funcionarios.add(new Funcionario("Alice", LocalDate.parse("05/01/1995", formatter), new BigDecimal("2234.68"), "Recepcionista"));
-        funcionarios.add(new Funcionario("Heitor", LocalDate.parse("19/11/1999", formatter), new BigDecimal("1582.72"), "Operador"));
-        funcionarios.add(new Funcionario("Arthur", LocalDate.parse("31/03/1993", formatter), new BigDecimal("4071.84"), "Contador"));
-        funcionarios.add(new Funcionario("Laura", LocalDate.parse("08/07/1994", formatter), new BigDecimal("3017.45"), "Gerente"));
-        funcionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), "Eletricista"));
-        funcionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), "Gerente"));
-
+        funcionarios.add(new Funcionario("Maria", LocalDate.parse("18/10/2000", formatter), new BigDecimal("2009.44"), FuncaoFuncionario.OPERADOR));
+        funcionarios.add(new Funcionario("João", LocalDate.parse("12/05/1990", formatter), new BigDecimal("2284.38"), FuncaoFuncionario.OPERADOR));
+        funcionarios.add(new Funcionario("Caio", LocalDate.parse("02/05/1961", formatter), new BigDecimal("9836.14"), FuncaoFuncionario.COORDENADOR));
+        funcionarios.add(new Funcionario("Miguel", LocalDate.parse("14/10/1988", formatter), new BigDecimal("19119.88"), FuncaoFuncionario.DIRETOR));
+        funcionarios.add(new Funcionario("Alice", LocalDate.parse("05/01/1995", formatter), new BigDecimal("2234.68"), FuncaoFuncionario.RECEPCIONISTA));
+        funcionarios.add(new Funcionario("Heitor", LocalDate.parse("19/11/1999", formatter), new BigDecimal("1582.72"), FuncaoFuncionario.OPERADOR));
+        funcionarios.add(new Funcionario("Arthur", LocalDate.parse("31/03/1993", formatter), new BigDecimal("4071.84"), FuncaoFuncionario.CONTADOR));
+        funcionarios.add(new Funcionario("Laura", LocalDate.parse("08/07/1994", formatter), new BigDecimal("3017.45"), FuncaoFuncionario.GERENTE));
+        funcionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), FuncaoFuncionario.ELETRICISTA));
+        funcionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), FuncaoFuncionario.GERENTE));
     }
 
     /**
@@ -104,7 +104,7 @@ public class FuncionarioService {
 
         funcionariosAgrupadosPorFuncao.clear();
         for (Funcionario funcionario : funcionarios) {
-            String funcao = funcionario.getFuncao();
+            FuncaoFuncionario funcao = funcionario.getFuncao();
 
             if (!funcionariosAgrupadosPorFuncao.containsKey(funcao))
                 funcionariosAgrupadosPorFuncao.put(funcao, new ArrayList<>());
