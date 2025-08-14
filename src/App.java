@@ -3,6 +3,38 @@ import com.victorgabdev.iniflex.service.FuncionarioService;
 
 import java.util.NoSuchElementException;
 
+/**
+ * Classe principal que representa a interface de usuário do sistema de funcionários.
+ * <p>
+ * Responsável por orquestrar as operações disponíveis no {@link FuncionarioService},
+ * exibindo mensagens claras e tratando possíveis erros durante a execução.
+ * </p>
+ *
+ * <p>O fluxo padrão inclui:</p>
+ * <ol>
+ *   <li>Carregar funcionários</li>
+ *   <li>Remover um funcionário específico ("João")</li>
+ *   <li>Listar todos os funcionários</li>
+ *   <li>Aplicar aumento salarial</li>
+ *   <li>Agrupar por função e exibir</li>
+ *   <li>Mostrar aniversariantes de outubro/dezembro</li>
+ *   <li>Exibir o funcionário mais velho</li>
+ *   <li>Listar em ordem alfabética</li>
+ *   <li>Calcular o total de salários</li>
+ *   <li>Converter salários para salários mínimos</li>
+ * </ol>
+ *
+ * <p>Tratamento de erros:</p>
+ * <ul>
+ *   <li>{@link FuncionariosJaCarregadosException} - Se os funcionários já foram carregados</li>
+ *   <li>{@link NoSuchElementException} - Se a lista de funcionários estiver vazia</li>
+ *   <li>Erros genéricos são capturados e exibidos de forma amigável</li>
+ * </ul>
+ *
+ * @author Victor Aquino
+ * @version 1.0
+ * @see FuncionarioService
+ */
 public class App {
 
     private static final FuncionarioService service = new FuncionarioService();
