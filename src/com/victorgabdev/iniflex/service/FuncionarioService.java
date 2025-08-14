@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Serviço responsável por gerenciar operações relacionadas aos funcionários,
@@ -30,7 +31,7 @@ public class FuncionarioService {
     private final List<Funcionario> funcionarios = new ArrayList<>();
 
     /** Mapa que agrupa funcionários por função. A chave é a função e o valor é a lista de funcionários. */
-    private final Map<FuncaoFuncionario, List<Funcionario>> funcionariosAgrupadosPorFuncao = new HashMap<>();
+    private Map<FuncaoFuncionario, List<Funcionario>> funcionariosAgrupadosPorFuncao = new HashMap<>();
 
     /**
      * Insere todos os funcionários na lista, utilizando dados pré-definidos.
@@ -103,14 +104,8 @@ public class FuncionarioService {
         if (funcionarios.isEmpty()) throw new NoSuchElementException("Não há funcionários cadastrados.");
 
         funcionariosAgrupadosPorFuncao.clear();
-        for (Funcionario funcionario : funcionarios) {
-            FuncaoFuncionario funcao = funcionario.getFuncao();
-
-            if (!funcionariosAgrupadosPorFuncao.containsKey(funcao))
-                funcionariosAgrupadosPorFuncao.put(funcao, new ArrayList<>());
-
-            funcionariosAgrupadosPorFuncao.get(funcao).add(funcionario);
-        }
+        funcionariosAgrupadosPorFuncao = funcionarios.stream()
+                .collect(Collectors.groupingBy(Funcionario::getFuncao));
     }
 
     /**
@@ -122,19 +117,12 @@ public class FuncionarioService {
         if (funcionariosAgrupadosPorFuncao.isEmpty())
             throw new NoSuchElementException("Os funcionários ainda não foram agrupados");
 
-        for (var entry : funcionariosAgrupadosPorFuncao.entrySet()) {
-
-            System.out.print(entry.getKey() + " = ");
-
-            boolean primeiro = true;
-            for (Funcionario f : entry.getValue()) {
-                if (!primeiro) System.out.print(", ");
-                System.out.print(f.getNome());
-                primeiro = false;
-            }
-
-            System.out.println();
-        }
+        funcionariosAgrupadosPorFuncao.forEach((funcao, funcionarios) -> {
+            String nomes = funcionarios.stream()
+                    .map(Funcionario::getNome)
+                    .collect(Collectors.joining(", "));
+            System.out.println(funcao.getDescricao() + " = " + nomes);
+        });
     }
 
     /**
@@ -165,10 +153,10 @@ public class FuncionarioService {
         if (funcionarios.isEmpty()) throw new NoSuchElementException("Não há funcionários cadastrados.");
 
         Funcionario maisVelho = funcionarios.stream()
-                .max(Comparator.comparing(f -> Period.between(f.getDataNascimento(), LocalDate.now()).getYears()))
+                .max(Comparator.comparingInt(f ->calculaIdade(f.getDataNascimento())))
                 .get();
 
-        int idade = Period.between(maisVelho.getDataNascimento(), LocalDate.now()).getYears();
+        int idade = calculaIdade(maisVelho.getDataNascimento());
         System.out.println("Nome: " + maisVelho.getNome() + ", Idade: " + idade);
     }
 
@@ -235,6 +223,16 @@ public class FuncionarioService {
     private BigDecimal calculaNovoSalario(BigDecimal salario, double percentual) {
         BigDecimal fator = BigDecimal.valueOf(percentual).divide(BigDecimal.valueOf(100));
         return salario.add(salario.multiply(fator)).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * Calcula a idade em anos completos a partir da data de nascimento informada.
+     *
+     * @param dataNascimento Data de nascimento da pessoa.
+     * @return Idade em anos completos, considerando a data atual.
+     */
+    private int calculaIdade(LocalDate dataNascimento) {
+        return Period.between(dataNascimento, LocalDate.now()).getYears();
     }
 
 }
