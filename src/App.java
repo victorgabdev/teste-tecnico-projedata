@@ -4,34 +4,118 @@ import com.victorgabdev.iniflex.service.FuncionarioService;
 import java.util.NoSuchElementException;
 
 public class App {
+
+    private static final FuncionarioService service = new FuncionarioService();
+
     public static void main(String[] args) {
 
-        FuncionarioService service = new FuncionarioService();
-
-        System.out.println("---TESTE TECNICO---");
-
         try {
-            System.out.println("-Inserindo Funcionários-");
-            service.inserirFuncionarios();
-            System.out.println("-Funcionários Inseridos");
+            executarOperacoes();
+        } catch (FuncionariosJaCarregadosException | NoSuchElementException e) {
+            System.err.println("ERRO: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("ERRO inesperado: " + e.getMessage());
+        } finally {
             System.out.println("-------------------------");
-
-            System.out.println("-Imprimir-");
-            service.imprimirTodosFuncionarios();
-            System.out.println("-------------------------");
-
-            System.out.println("-Arupar-");
-            service.agruparFuncionariosPorFuncao();
-            System.out.println("-Funcionários Agrupados");
-            System.out.println("-------------------------");
-
-            System.out.println("-Imprimir Agrupados");
-            service.imprimirFuncionariosAgrupados();
-            System.out.println("-------------------------");
-        } catch (FuncionariosJaCarregadosException | NoSuchElementException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println("Processo concluído");
         }
 
-
     }
+
+    private static void executarOperacoes() {
+        carregarFuncionarios();
+        removerFuncionarioJoao();
+        listarTodosFuncionarios();
+        aplicarAumentoSalarial(10);
+        agruparPorFuncao();
+        listarAgrupadosPorFuncao();
+        listarAniversariantesOutubroEDezembro();
+        exibirFuncionarioMaisVelho();
+        listarOrdemAlfabetica();
+        exibirTotalSalarios();
+        converterSalariosParaMinimos();
+    }
+
+    private static void carregarFuncionarios() {
+        System.out.println("1) Carregando funcionários...");
+        service.inserirFuncionarios();
+        System.out.println("✔ Funcionários carregados com sucesso");
+        printSeparador();
+    }
+
+    private static void removerFuncionarioJoao() {
+        System.out.println("2) Removendo funcionário João...");
+        service.removerFuncionario("João");
+        System.out.println("✔ João removido com sucesso");
+        printSeparador();
+    }
+
+    private static void listarTodosFuncionarios() {
+        System.out.println("3) Listando todos os funcionários:");
+        service.imprimirTodosFuncionarios();
+        System.out.println("✔ Listagem concluída");
+        printSeparador();
+    }
+
+    private static void aplicarAumentoSalarial(double percentual) {
+        System.out.printf("4) Aplicando aumento de %.0f%% nos salários...\n", percentual);
+        service.aplicarAumentoPercentual(percentual);
+        System.out.println("✔ Aumento aplicado com sucesso");
+        printSeparador();
+    }
+
+    private static void agruparPorFuncao() {
+        System.out.println("5) Agrupando funcionários por função...");
+        service.agruparFuncionariosPorFuncao();
+        System.out.println("✔ Agrupamento concluído");
+        printSeparador();
+    }
+
+    private static void listarAgrupadosPorFuncao() {
+        System.out.println("6) Listando funcionários agrupados por função:");
+        service.imprimirFuncionariosAgrupados();
+        System.out.println("✔ Listagem agrupada concluída");
+        printSeparador();
+    }
+
+    private static void listarAniversariantesOutubroEDezembro() {
+        System.out.println("7) Funcionários que fazem aniversário em Outubro e Dezembro:");
+        service.imprimirAniversariantesMes10E12();
+        System.out.println("✔ Listagem de aniversariantes concluída");
+        printSeparador();
+    }
+
+    private static void exibirFuncionarioMaisVelho() {
+        System.out.println("8) Funcionário mais velho da empresa:");
+        service.imprimirFuncionarioMaisVelho();
+        System.out.println("✔ Informação exibida com sucesso");
+        printSeparador();
+    }
+
+    private static void listarOrdemAlfabetica() {
+        System.out.println("9) Listando funcionários em ordem alfabética:");
+        service.imprimirFuncionariosOrdemAlfabetica();
+        System.out.println("✔ Listagem ordenada concluída");
+        printSeparador();
+    }
+
+    private static void exibirTotalSalarios() {
+        System.out.println("10) Total dos salários dos funcionários:");
+        service.imprimirTotalSalarios();
+        System.out.println("✔ Total calculado e exibido");
+        printSeparador();
+    }
+
+    private static void converterSalariosParaMinimos() {
+        System.out.println("11) Salários em termos de salários mínimos:");
+        service.imprimirSalariosEmMinimos();
+        System.out.println("✔ Conversão realizada com sucesso");
+    }
+
+
+    private static void printSeparador() {
+        System.out.println("-------------------------");
+    }
+
+
 }
