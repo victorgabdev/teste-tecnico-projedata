@@ -29,6 +29,7 @@ O projeto é organizado em pacotes para manter a clareza e a modularidade:
 * `com.victorgabdev.iniflex.entities`: Inclui as classes de modelo, como `Pessoa`, `Funcionario` e o enum `FuncaoFuncionario`.
 * `com.victorgabdev.iniflex.exceptions`: Contém a exceção customizada `FuncionariosJaCarregadosException`.
 * `com.victorgabdev.iniflex.service`: Contém a classe `FuncionarioService`, que concentra toda a lógica de negócio e manipulação dos dados.
+* `com.victorgabdev.iniflex.repository`: Contém a interface `IFuncionarioRepository` e a sua implementação `FuncionarioRepositoryImpl`, responsável pela persistência dos dados.
 
 ---
 
