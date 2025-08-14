@@ -4,6 +4,8 @@ import com.victorgabdev.iniflex.entities.FuncaoFuncionario;
 import com.victorgabdev.iniflex.entities.Funcionario;
 import com.victorgabdev.iniflex.entities.Pessoa;
 import com.victorgabdev.iniflex.exceptions.FuncionariosJaCarregadosException;
+import com.victorgabdev.iniflex.repositoty.FuncionarioRepositoryImpl;
+import com.victorgabdev.iniflex.repositoty.IFuncionarioRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,10 +30,24 @@ import java.util.stream.Collectors;
 public class FuncionarioService {
 
     /** Lista de funcionários cadastrados. */
-    private final List<Funcionario> funcionarios = new ArrayList<>();
+    private List<Funcionario> funcionarios = new ArrayList<>();
 
     /** Mapa que agrupa funcionários por função. A chave é a função e o valor é a lista de funcionários. */
     private Map<FuncaoFuncionario, List<Funcionario>> funcionariosAgrupadosPorFuncao = new HashMap<>();
+
+    /**
+     * Repositório de dados de funcionários, responsável pela persistência dos dados.
+     * <p>
+     * Utiliza a implementação concreta {@link FuncionarioRepositoryImpl} que fornece
+     * acesso aos dados dos funcionários. Este repositório segue o padrão de injeção
+     * de dependência através do uso da interface {@link IFuncionarioRepository}.
+     * </p>
+     * <p>
+     * O repositório é final e inicializado durante a construção do serviço,
+     * garantindo que sempre haverá uma instância válida disponível.
+     * </p>
+     */
+    private final IFuncionarioRepository repository = new FuncionarioRepositoryImpl();
 
     /**
      * Insere todos os funcionários na lista, utilizando dados pré-definidos.
@@ -41,19 +57,7 @@ public class FuncionarioService {
     public void inserirFuncionarios() {
 
         if (!funcionarios.isEmpty()) throw new FuncionariosJaCarregadosException("Funcionarios já foram cadastrados");
-
-        DateTimeFormatter formatter = getFormatter();
-
-        funcionarios.add(new Funcionario("Maria", LocalDate.parse("18/10/2000", formatter), new BigDecimal("2009.44"), FuncaoFuncionario.OPERADOR));
-        funcionarios.add(new Funcionario("João", LocalDate.parse("12/05/1990", formatter), new BigDecimal("2284.38"), FuncaoFuncionario.OPERADOR));
-        funcionarios.add(new Funcionario("Caio", LocalDate.parse("02/05/1961", formatter), new BigDecimal("9836.14"), FuncaoFuncionario.COORDENADOR));
-        funcionarios.add(new Funcionario("Miguel", LocalDate.parse("14/10/1988", formatter), new BigDecimal("19119.88"), FuncaoFuncionario.DIRETOR));
-        funcionarios.add(new Funcionario("Alice", LocalDate.parse("05/01/1995", formatter), new BigDecimal("2234.68"), FuncaoFuncionario.RECEPCIONISTA));
-        funcionarios.add(new Funcionario("Heitor", LocalDate.parse("19/11/1999", formatter), new BigDecimal("1582.72"), FuncaoFuncionario.OPERADOR));
-        funcionarios.add(new Funcionario("Arthur", LocalDate.parse("31/03/1993", formatter), new BigDecimal("4071.84"), FuncaoFuncionario.CONTADOR));
-        funcionarios.add(new Funcionario("Laura", LocalDate.parse("08/07/1994", formatter), new BigDecimal("3017.45"), FuncaoFuncionario.GERENTE));
-        funcionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), FuncaoFuncionario.ELETRICISTA));
-        funcionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), FuncaoFuncionario.GERENTE));
+        funcionarios = repository.retornaTodosFuncionarios();
     }
 
     /**
